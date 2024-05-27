@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
-# Фикстура для инициализации и закрытия драйвера
+# Fixture for initializing and closing the driver.
 @pytest.fixture
 def driver():
     driver = webdriver.Chrome()
@@ -12,23 +12,21 @@ def driver():
     driver.quit()
 
 def test_login_failure(driver):
-    time.sleep(4)  # Ожидаем загрузку страницы авторизации
-
-    # Ввод логина
+    time.sleep(4)  # Waiting for the login page to load.
+    # Entering login
     login_input = driver.find_element(By.ID, "username")
     login_input.send_keys("sergun2099@gmail.com")
 
-    # Ввод неверного пароля
+    # Entering an incorrect password.
     password_input = driver.find_element(By.ID, "password")
     password_input.send_keys("WrongPassword123")
 
-    # Нажатие на кнопку входа
+    #Clicking on the login button.
     login_button = driver.find_element(By.ID, "kc-login")
     login_button.click()
 
-    time.sleep(2)  # Ожидаем реакцию системы на попытку авторизации
-
-    # Проверяем наличие сообщений об ошибке
+    time.sleep(2)  # Waiting for the system's response to the login attempt.
+    # Checking for error messages
     error_messages = driver.find_elements(By.XPATH, '//*[@id="page-right"]/div[1]/div[1]/div[1]')
 
-    assert len(error_messages) > 0, "Ошибка авторизации не была обнаружена"
+    assert len(error_messages) > 0, "Authorization error was not detected"
